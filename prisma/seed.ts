@@ -4,10 +4,34 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function seed() {
-  users.forEach(async (data) => {
-    await prisma.user.create({ data });
+  users.forEach(async (user, index) => {
+    await prisma.address.create({
+      data: {
+        ...user.address,
+        userId: user.id,
+        geo: { create: { ...user.address.geo } },
+      },
+    });
   });
 }
+
+// async function seed() {
+//   users.forEach(async (user, index) => {
+//     await prisma.company.create({ data: { ...user.company, userId: user.id } });
+//   });
+// }
+
+// async function seed() {
+//   users.forEach(async (user) => {
+//     await prisma.user.create({
+//       data: {
+//         ...user,
+//         company: { connect: { userId: user.id } },
+//         address: { connect: { userId: user.id } },
+//       },
+//     });
+//   });
+// }
 
 // async function seed() {
 //   posts.forEach(async (data) => {

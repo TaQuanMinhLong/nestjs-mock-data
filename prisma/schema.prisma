@@ -8,14 +8,44 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
   name     String
   username String
   email    String
   phone    String
   website  String
+  address  Address?
+  company  Company?
   posts    Post[]
   todos    Todo[]
+}
+
+model Company {
+  id          Int    @id @default(autoincrement())
+  name        String @unique
+  catchPhrase String
+  bs          String
+  userId      Int    @unique
+  user        User   @relation(fields: [userId], references: [id])
+}
+
+model Address {
+  id      Int         @id @default(autoincrement())
+  userId  Int         @unique
+  user    User        @relation(fields: [userId], references: [id])
+  street  String
+  suite   String
+  city    String
+  zipcode String
+  geo     Coordinate?
+}
+
+model Coordinate {
+  id        Int     @id @default(autoincrement())
+  lat       String
+  lng       String
+  addressId Int     @unique
+  address   Address @relation(fields: [addressId], references: [id])
 }
 
 model Post {
